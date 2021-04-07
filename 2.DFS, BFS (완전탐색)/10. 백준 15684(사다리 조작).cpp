@@ -1,5 +1,5 @@
 ﻿/*
-10. 백준 15684(사다리 조작)
+10. 백준15684(사다리 조작)
 문제
 사다리 게임은 N개의 세로선과 M개의 가로선으로 이루어져 있다. 인접한 세로선 사이에는 가로선을 놓을 수 있는데, 각각의 세로선마다 가로선을 놓을 수 있는 위치의 개수는 H이고, 모든 세로선이 같은 위치를 갖는다. 아래 그림은 N = 5, H = 6 인 경우의 그림이고, 가로선은 없다.
 
@@ -90,6 +90,94 @@ i번 세로선의 결과가 i번이 나오도록 사다리 게임을 조작하�
 */
 
 #define _CRT_SECURE_NO_WARNINGS
+#define INF 2147000000
+
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+int DFS(int, int);
+bool valid();
+int map[31][11];
+int n, h, res = INF;
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	freopen("input.txt", "rt", stdin);
+	int m, a, b;
+	cin >> n >> m >> h;
+	if (m == 0) {
+		cout << 0;
+		return 0;
+	}
+	for (int i = 0; i < m; i++) {
+		cin >> a >> b;
+		map[a][b] = 1;
+		map[a][b + 1] = 2;
+	}
+	res = DFS(0, 0);
+	cout << (res != INF ? res : -1);
+	return 0;
+}
+
+int DFS(int pos, int accum) {
+	if (accum == 3 || pos >= n * h) {
+		return (valid() ? accum : INF);
+	}
+	else {
+		int left = INF;
+		int right = INF;
+		int i = pos / n + 1;
+		int j = pos % n + 1;
+		if (j != n && map[i][j] == 0 && map[i][j + 1] == 0) {
+			map[i][j] = 1;
+			map[i][j + 1] = 2;
+			left = DFS(pos + 2, accum + 1);
+			map[i][j] = 0;
+			map[i][j + 1] = 0;
+		}
+		right = DFS(pos + 1, accum);
+		return min(left, right);
+	}
+}
+
+bool valid() {
+	for (int i = 1; i <= n; i++) {
+		int now = i;
+		for (int j = 1; j <= h; j++) {
+			if (map[j][now] == 1) {
+				now += 1;
+			}
+			else if (map[j][now] == 2) {
+				now -= 1;
+			}
+		}
+		if (now != i) return false;
+	}
+	return true;
+}
+
+/*
+모범 답안
+	(팁)
+	이차원 배열에서 DFS(int pos)를 구현할 때
+	/과 %를 사용하여 i와 j를 나타낼 수 있다!
+	(i = pos / n, j = pos % n)
+*/
+
+/*
+모범 답안 반영 전
+
+	예제는 풀리나 채점에서 시간 초과됨
+	가로로 진행하는 과정에서 뒤에 세로 방향 연산들의 중복이 발생하여
+	메모이제이션을 구현하려고 했으나 풀이의 틀린점을 발견함!
+
+	가로로 진행하는 방향과 세로로 진행하는 방향을 나누어 생각해서 어려웠음
+	진행 방향이 아니라 놓을 수 있는 자리를 기준으로
+	놓냐/안놓냐를 DFS로 완전 탐색해서 문제 해결!
+
+	아래는 다음 새로운 세로방향으로 진행할때 이미 지나간 가로방향을 다시 선택할 수 없어서
+	모든 경우의 수를 탐색할 수 없으므로 잘못된 풀이!
 
 #include<iostream>
 using namespace std;
@@ -114,32 +202,32 @@ int main() {
 		map[a][b] = 1;
 		map[a][b + 1] = 2;
 	}
-	DFS(1,0);
+	DFS(1, 0);
+	if (res > 3) {
+		cout << -1;
+		return 0;
+	}
 	cout << (res != 2147000000 ? res : -1);
 	return 0;
 }
 
 void DFS(int b, int accum) {
+	if (accum > 3) return;
 	if (b == n) {
 		for (int i = 1; i <= n; i++) {
-			if (valid(i) == false) return;
+			if (!valid(i)) return;
 		}
 		if (res > accum) res = accum;
 	}
 	else {
-		if (valid(b)) {
-			DFS(b + 1, accum);
-		}
-		else {
-			for (int i = 1; i <= h; i++) {
-				if (map[b][i] == 0 && map[b + 1][i] == 0) {
-					map[b][i] = 1;
-					map[b + 1][i] = 2;
-					DFS(b + 1, accum + 1);
-					map[b][i] = 0;
-					map[b + 1][i] = 0;
-					DFS(b + 1, accum);
-				}
+		for (int i = 1; i <= h; i++) {
+			if (map[i][b] == 0 && map[i][b + 1] == 0) {
+				map[i][b] = 1;
+				map[i][b + 1] = 2;
+				DFS(b + 1, accum + 1);
+				map[i][b] = 0;
+				map[i][b + 1] = 0;
+				DFS(b + 1, accum);
 			}
 		}
 	}
@@ -148,31 +236,13 @@ void DFS(int b, int accum) {
 bool valid(int b) {
 	int now = b;
 	for (int i = 1; i <= h; i++) {
-		if (map[now][i] == 1) {
+		if (map[i][now] == 1) {
 			now += 1;
 		}
-		else if (map[now][i] == 2) {
+		else if (map[i][now] == 2) {
 			now -= 1;
 		}
 	}
 	return (now == b ? true : false);
 }
-
-
-/*
-모범 답안
-	
-*/
-
-/*
-모범 답안 반영 전
-	(이어서 해야할 것)
-	1. 일단 예제 풀기
-		일단 예제라도 올바르게 풀려고 생각하기 쉽게 DFS(int b, int accum)를 구현함.
-		하지만 현재 어떤 DFS도 if(res > accum) res = accum;에 도달하지 못하는 상황.
-		올바르게 예제가 풀리게 코드 수정하기
-
-	2. 메모이제이션 적용
-		올바르게 예제가 풀린다면 DFS를 return save[a][b] = min(left, right)형태로 보완하고
-		메모이제이션 적용하기
 */
