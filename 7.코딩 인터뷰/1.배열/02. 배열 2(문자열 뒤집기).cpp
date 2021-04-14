@@ -33,7 +33,7 @@ using namespace std;
 	공간 복잡도: O(N)
 */
 
-string solution1(string message) {
+string solution1(string &message) {
 	string reverseStr;
 	for (int i = message.size() - 1; i >= 0; i--) {
 		reverseStr += message[i];
@@ -49,7 +49,7 @@ string solution1(string message) {
 	공간 복잡도: O(1)
 */
 
-string solution2(string message) {
+string solution2(string &message) {
 	int size = message.size();
 	for (int i = 0; i < size / 2; i++) {
 		char temp = message[i];
@@ -60,9 +60,10 @@ string solution2(string message) {
 }
 
 int main() {
-	string message = "Hello";
+	string message1 = "Hello";
+	string message2 = "Hello";
 
-	cout << solution1(message) << endl;
-	cout << solution2(message) << endl;
+	cout << solution1(message1) << endl;
+	cout << solution2(message2) << endl;
 	return 0;
 }
