@@ -19,9 +19,9 @@ using namespace std;
 
 /*
 풀이 )
-	numbers를 순회하면서 map을 사용하여 확인한다.
+	numbers를 이중으로 순회하면서 map을 2번씩 사용하여 확인한다.
 
-	시간 복잡도: O(N^2)	(O(N) * (O(N) + O(N)))
+	시간 복잡도: O(N^2)	(O(N) + O(N) * O(N))
 	공간 복잡도: O(N)
 */
 
