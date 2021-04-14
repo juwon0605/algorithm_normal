@@ -32,14 +32,13 @@ void solution1(int *numbers, int size, int target) {
 		//uM[numbers[i]] = i;	// 이렇게 insert도 가능
 	}
 	for (int i = 0; i < size - 2; i++) {
-		int other = target - numbers[i];
 		for (int j = i + 1; j < size; j++) {
-			int other2 = other - numbers[j];
-			if (numbers[i] != numbers[j] && numbers[j] != other2 && other2 != numbers[i]
-				&& uM.find(numbers[i]) != uM.end() && uM.find(numbers[j]) != uM.end() && uM.find(other2) != uM.end()) {
+			int other = target - numbers[i] - numbers[j];
+			if (numbers[i] != numbers[j] && numbers[j] != other && other != numbers[i]
+				&& uM.find(numbers[i]) != uM.end() && uM.find(numbers[j]) != uM.end() && uM.find(other) != uM.end()) {
 				cout << "첫 번째 인덱스: " << i << endl;
 				cout << "두 번째 인덱스: " << j << endl;
-				cout << "세 번째 인덱스: " << uM.find(other2)->second << endl;
+				cout << "세 번째 인덱스: " << uM.find(other)->second << endl;
 				return;
 			}
 		}
