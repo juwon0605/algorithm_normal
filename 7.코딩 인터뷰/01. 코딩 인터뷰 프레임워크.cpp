@@ -36,10 +36,10 @@ using namespace std;
 	공간 복잡도: O(N)
 */
 
-int solution1(int* numbers, int count) {
+int solution1(int* numbers, int size) {
 	vector<int> V;
 	bool duplicatation;
-	for (int i = 0; i < count; i++) {
+	for (int i = 0; i < size; i++) {
 		duplicatation = false;
 		for (int j = 0; j < V.size(); j++) {
 			if (numbers[i] == V[j]) {
@@ -63,12 +63,12 @@ int solution1(int* numbers, int count) {
 	공간 복잡도: O(N)
 */
 
-int solution2(int* numbers, int count) {
+int solution2(int* numbers, int size) {
 	unordered_map<int, int> uM;
-	for (int i = 0; i < count; i++) {
+	for (int i = 0; i < size; i++) {
 		uM[numbers[i]]++;
 	}
-	for (int i = 0; i < count; i++) {
+	for (int i = 0; i < size; i++) {
 		if (uM[numbers[i]] == 1) {
 			return numbers[i];
 		}
@@ -85,19 +85,19 @@ int solution2(int* numbers, int count) {
 	공간 복잡도: O(1)
 */
 
-int solution3(int* numbers, int count) {
+int solution3(int* numbers, int size) {
 	int uniqueNum = 0;
-	for (int i = 0; i < count; i++) {
+	for (int i = 0; i < size; i++) {
 		uniqueNum ^= numbers[i];
 	}
 	return uniqueNum;
 }
 
 int main() {
-	int numbers[5] = { 1,2,2,3,3 };
-	int count = 5;
-	cout << solution1(numbers, count) << endl;
-	cout << solution2(numbers, count) << endl;
-	cout << solution2(numbers, count) << endl;
+	int numbers[] = { 1,2,2,3,3 };
+	int size = sizeof(numbers) / sizeof(numbers[0]);
+	cout << solution1(numbers, size) << endl;	// 1
+	cout << solution2(numbers, size) << endl;	// 1
+	cout << solution2(numbers, size) << endl;	// 1
 	return 0;
 }
