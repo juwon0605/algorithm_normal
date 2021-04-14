@@ -89,18 +89,7 @@ bool solution3(int* numbers, int size) {
 	return false;
 }
 
-
-//#define _CRT_SECURE_NO_WARNINGS
-
-//#include<iostream>
-//#include<vector>
-//using namespace std;
-
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	//freopen("input.txt", "rt", stdin);
-
 	// []로 배열 선언
 	int numbers1[] = { 1,2,2,3,3 };
 	
