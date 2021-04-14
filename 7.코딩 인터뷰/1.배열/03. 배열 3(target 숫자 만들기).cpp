@@ -50,7 +50,7 @@ void solution1(int *numbers, int size, int target) {
 
 /*
 풀이 2)
-	numbers를 순회하면서 모든 경우의 수를 확인한다.
+	map를 사용하여 확인한다.
 
 	시간 복잡도: O(N)	(O(N) + O(N))
 	공간 복잡도: O(N)
