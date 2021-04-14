@@ -84,6 +84,7 @@ bool solution3(int* numbers, int size) {
 		}
 		else {
 			uS.insert(numbers[i]);
+			//uS[numbers[i]];	error
 		}
 	}
 	return false;
@@ -123,13 +124,3 @@ int main() {
 	cout << solution3(numbers2, size6) << endl;
 	return 0;
 }
-
-/*
-모범 답안
-
-*/
-
-/*
-모범 답안 반영 전
-
-*/
