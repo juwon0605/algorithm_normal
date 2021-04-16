@@ -102,7 +102,7 @@ void SingleLinkedList::reverse() {
 
 /*
 풀이 2)
-	포인터 방향을 뒤집는 재귀함수를 구현한다.
+	포인터 방향을 뒤집는 재귀함수를 구현한다. (재귀방향 = 역순회)
 	각 위치에서 next를 호출해서 next->next = current로 방향을 뒤집는다.
 
 	시간 복잡도: O(N)
