@@ -56,6 +56,82 @@ Aaab
 
 #include<iostream>
 #include<string>
+using namespace std;
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	freopen("input.txt", "rt", stdin);
+	int rCntArr[52] = { 0 };
+	int sCntArr[52] = { 0 };
+	string r, s;
+	int t, res, cnt, pos, start, end;
+	cin >> t;
+	while (t--) {
+		cin >> r >> s;
+		res = INF, cnt = 0;
+		fill(rCntArr, rCntArr + 52, 0);
+		fill(sCntArr, sCntArr + 52, 0);
+		for (int i = 0; i < s.size(); i++) {
+			pos = (s[i] >= 97 ? s[i] - 97 + 26 : s[i] - 65);
+			sCntArr[pos]++;
+		}
+		for (int i = 0; i < r.size(); i++) {
+			pos = (r[i] >= 97 ? r[i] - 97 + 26 : r[i] - 65);
+			if (rCntArr[pos] < sCntArr[pos]) {
+				if (cnt == 0) start = i;
+				end = i;
+				cnt++;
+			}
+			if (sCntArr[pos] > 0) {
+				rCntArr[pos]++;
+			}
+			while (cnt == s.size()) {
+				if (res > end - start + 1) res = end - start + 1;
+				pos = (r[start] >= 97 ? r[start] - 97 + 26 : r[start] - 65);
+				if (sCntArr[pos] > 0) rCntArr[pos]--;
+				if (rCntArr[pos] < sCntArr[pos]) cnt--;
+				start++;
+			}
+		}
+		cout << (res != INF ? res : 0) << endl;
+	}
+	return 0;
+}
+
+/*
+모범 답안
+	알파벳의 개수가 52개라는 점을 활용해서
+	O(N) 순회 조회를 O(1) 배열 인덱스 조회로 개선!
+	따라서 시간복잡도가 O(N^2)에서 O(N)으로 개선
+
+	시간복잡도
+		O(TN)
+	공간복잡도
+		O(N)
+*/
+
+/*
+모범 답안 반영전
+	DFS로 완전탐색 해서 풀었음.
+
+	시간복잡도
+		O(T2^N)
+	공간복잡도
+		O(N)
+
+	(보완 사항)
+	unoredered_map으로 S의 원소가 R의 원소에 있는지를
+	O(R)이 아니라 O(1)으로 탐색할 수 있음.
+	시간 복잡도
+		O(2^N * NM) -> O(2^N * N)
+	결과적으로 시간복잡도가 O(2^N)으로 동일해서 보완하지 않음.
+
+#define _CRT_SECURE_NO_WARNINGS
+#define INF 2147000000
+
+#include<iostream>
+#include<string>
 #include<algorithm>
 using namespace std;
 
@@ -100,28 +176,4 @@ void DFS(int L) {
 		DFS(L + 1);
 	}
 }
-
-/*
-모범 답안
-	시간복잡도
-
-	공간복잡도
-
-*/
-
-/*
-모범 답안 반영전
-
-	DFS로 완전탐색 해서 풀었음.
-	시간복잡도
-		O(2^N)
-	공간복잡도
-		O(N)
-
-	(보완 사항)
-	unoredered_map으로 S의 원소가 R의 원소에 있는지를
-	O(R)이 아니라 O(1)으로 탐색할 수 있음.
-	시간 복잡도
-		O(2^N * NM) -> O(2^N * N)
-	결과적으로 시간복잡도가 O(2^N)으로 동일해서 보완하지 않음.
 */
