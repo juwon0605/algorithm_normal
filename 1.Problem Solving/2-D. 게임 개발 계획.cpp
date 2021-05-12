@@ -73,8 +73,77 @@ orange 19 40
 출력
 4
 3
-(empty line
+(empty line)
 */
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+struct Item {
+	int start;
+	int finish;
+	Item(int a, int b) {
+		start = a;
+		finish = b;
+	}
+	bool operator < (const Item &b) const {
+		return finish < b.finish;
+	}
+};
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	freopen("input.txt", "rt", stdin);
+	string a;
+	int t, n, b, c, res, preFinish;
+	cin >> t;
+	while (t--) {
+		cin >> n;
+		res = 0;
+		vector<Item> itemV;
+		while (n--) {
+			cin >> a >> b >> c;
+			itemV.push_back(Item(b, c));
+		}
+		sort(itemV.begin(), itemV.end());
+		preFinish = itemV[0].finish;
+		res++;
+		for (int i = 1; i < itemV.size(); i++) {
+			if (preFinish <= itemV[i].start) {
+				preFinish = itemV[i].finish;
+				res++;
+			}
+		}
+		cout << res << endl;
+	}
+	return 0;
+}
+
+/*
+모범 답안
+	현재 시점에서 가장 빨리 끝나는 item을 선택하는 것이 최적이다.
+
+	시간복잡도
+		O(TNlogN)
+	공간복잡도
+		O(N)
+*/
+
+/*
+모범 답안 반영전
+	주어진 값의 범위를 이용해서 Count Sort하고
+	DFS와 메모이제이션으로 풀었음!
+
+	시간복잡도
+		O(TK) (K=10,000)(0<=N<=10,000)
+	공간복잡도
+		O(K) (K=10,000)(0<=N<=10,000)
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -125,22 +194,4 @@ int DFS(int L, vector<int>* timeV) {
 		return save[L] = max(left, right);
 	}
 }
-
-/*
-모범 답안
-	시간복잡도
-		O(TNlogN)
-	공간복잡도
-		O(N)
-*/
-
-/*
-모범 답안 반영전
-	주어진 값의 범위를 이용해서 Count Sort하고
-	DFS와 메모이제이션으로 풀었음!
-
-	시간복잡도
-		O(TK) (K=10,000)(0<=N<=10,000)
-	공간복잡도
-		O(K) (K=10,000)(0<=N<=10,000)
 */
