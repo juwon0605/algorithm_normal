@@ -160,7 +160,7 @@ void BFS(int y, int x) {
 				}
 			}
 			else if (map[ii][jj] >= 65 && map[ii][jj] < 65 + cardNum) {
-				if (cardFlag[map[ii][jj] - 65] == 1 || findCard[map[ii][jj] - 65] == 1) {
+				if (findCard[map[ii][jj] - 65] == 1) {
 					flag[ii][jj] = flag[i][j] + 1;
 					Q.push(make_pair(ii, jj));
 				}
