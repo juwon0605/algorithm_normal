@@ -40,7 +40,7 @@ E peek(): 큐의 head에 들어있는 값을 리턴하지만 큐에서 빼지는
 문제 2) LRU 캐시 구현
 	최대 n개 만큼의 가장 최근에 접근한 데이터를 캐싱하는 LRU (least recently used) 캐시를 구현하라.
 
-	입력값 number는 1부터 100까지의 숫자가 랜덤하게 입력된다. 그 중에 최대 n (1보다 크고 9보다 작은)개 만큼의 데이터만 캐시할 수 있다. n개를 넘는 새로운 값이 들어오면 그 중에서 가장 오래전에 접근한 데이터를 삭제하고 number를 캐시에 추가한다. 
+	입력값 number는 1부터 100까지의 숫자가 랜덤하게 입력된다. 그 중에 최대 n (1보다 크고 9보다 작은)개 만큼의 데이터만 캐시할 수 있다. n개를 넘는 새로운 값이 들어오면 그 중에서 가장 오래전에 접근한 데이터를 삭제하고 number를 캐시에 추가한다.
 
 	다음 오퍼레이션을 구현하라.
 	query(int number): number에 해당하는 입력값을 캐시에 추가한다.
@@ -51,7 +51,7 @@ E peek(): 큐의 head에 들어있는 값을 리턴하지만 큐에서 빼지는
 
 #include<iostream>
 #include<queue>
-#include<stack>
+#include<unordered_map>
 using namespace std;
 
 #define cacheSize 3
@@ -102,14 +102,98 @@ private:
 	deque<int>::iterator iter;
 };
 
+/*
+풀이 2)
+	unordered map와 double linked list를 사용해서 구현한다.
+
+	시간 복잡도: O(1)
+	공간 복잡도: O(N)
+*/
+
+class Node {
+public:
+	int data;
+	Node* pre = NULL;
+	Node* next = NULL;
+};
+
+class Cache2 {
+public:
+	void query(int number) {
+		iter = uMap.find(number);
+		if (iter != uMap.end()) {
+			redirect(iter->second);
+			addToHead(iter->second);
+			uMap.erase(iter);
+		}
+		else {
+			Node* nodeToAdd = new Node();
+			nodeToAdd->data = number;
+			if (uMap.size() == cacheSize) {
+				iter = uMap.find(tail->data);
+				redirect(*tail);
+				uMap.erase(iter);
+			}
+			addToHead(*nodeToAdd);
+			//uMap.insert(make_pair<number, *nodeToAdd>);
+			uMap[number] = *nodeToAdd;
+		}
+	}
+
+	void print() {
+		Node* current = head;
+		while (current != NULL) {
+			cout << current->data << " ";
+			current = current->next;
+		}
+		cout << endl;
+	}
+
+	void redirect(Node target) {
+		// target의 앞의 Node redirect
+		if (target.pre != NULL) {
+			target.pre->next = target.next;
+		}
+		else {
+			head = target.next;
+		}
+		// target의 뒤의 Node redirect
+		if (target.next != NULL) {
+			target.next->pre = target.pre;
+		}
+		else {
+			tail = target.pre;
+		}
+	}
+
+	void addToHead(Node target) {
+		target.pre = NULL;
+		target.next = head;
+		if (head != NULL) {
+			head->pre = &target;
+		}
+		head = &target;
+		if (tail == NULL) {
+			tail = head;
+		}
+	}
+
+private:
+	Node* head;
+	Node* tail;
+	unordered_map<int, Node> uMap;
+	unordered_map<int, Node>::iterator iter;
+};
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	int example[] = { 1, 2, 3, 1, 4, 5, 2, 2, 1 };
-	Cache1 cache1;
+	//Cache1 cache;
+	Cache2 cache;
 	for (int i = 0; i < sizeof(example) / sizeof(example[0]); i++) {
-		cache1.query(example[i]);
-		cache1.print();
+		cache.query(example[i]);
+		cache.print();
 	}
 	return 0;
 }
