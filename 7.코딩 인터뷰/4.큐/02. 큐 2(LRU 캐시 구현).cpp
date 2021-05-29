@@ -104,7 +104,7 @@ private:
 
 /*
 풀이 2)
-	unordered map와 double linked list를 사용해서 구현한다.
+	unordered map에 key = int, value = double linked list를 사용해서 구현한다.
 
 	시간 복잡도: O(1)
 	공간 복잡도: O(N)
@@ -122,21 +122,23 @@ public:
 	void query(int number) {
 		iter = uMap.find(number);
 		if (iter != uMap.end()) {
-			redirect(iter->second);
-			addToHead(iter->second);
-			uMap.erase(iter);
+			remove(&(iter->second));
+			addToHead(&(iter->second));
 		}
 		else {
-			Node* nodeToAdd = new Node();
-			nodeToAdd->data = number;
+			Node nodeToAdd;
+			nodeToAdd.data = number;
 			if (uMap.size() == cacheSize) {
 				iter = uMap.find(tail->data);
-				redirect(*tail);
+				remove(tail);
 				uMap.erase(iter);
 			}
-			addToHead(*nodeToAdd);
+			//addToHead(&nodeToAdd); 
+			// -> error 발생! -> 아래와 같이 Map에 넣어주고, 넣어준 node의 원본을 변경!
+			uMap[number] = nodeToAdd;
 			//uMap.insert(make_pair<number, *nodeToAdd>);
-			uMap[number] = *nodeToAdd;
+			// -> make_pair 불가 -> 위와 같이 insert
+			addToHead(&uMap[number]);
 		}
 	}
 
@@ -149,38 +151,40 @@ public:
 		cout << endl;
 	}
 
-	void redirect(Node target) {
-		// target의 앞의 Node redirect
-		if (target.pre != NULL) {
-			target.pre->next = target.next;
-		}
-		else {
-			head = target.next;
-		}
-		// target의 뒤의 Node redirect
-		if (target.next != NULL) {
-			target.next->pre = target.pre;
-		}
-		else {
-			tail = target.pre;
-		}
-	}
-
-	void addToHead(Node target) {
-		target.pre = NULL;
-		target.next = head;
+	// 주의: 파라미터를 Node의 복사값을 넘겨 받으면 print()에서 error 발생
+	void addToHead(Node* target) {
+		target->pre = NULL;
+		target->next = head;
 		if (head != NULL) {
-			head->pre = &target;
+			head->pre = target;
 		}
-		head = &target;
+		head = target;
 		if (tail == NULL) {
 			tail = head;
 		}
 	}
 
+	// 주의: 파라미터를 Node의 복사값을 넘겨 받으면 print()에서 error 발생
+	void remove(Node* target) {
+		// target의 앞의 Node redirect
+		if (target->pre != NULL) {
+			target->pre->next = target->next;
+		}
+		else {
+			head = target->next;
+		}
+		// target의 뒤의 Node redirect
+		if (target->next != NULL) {
+			target->next->pre = target->pre;
+		}
+		else {
+			tail = target->pre;
+		}
+	}
+
 private:
-	Node* head;
-	Node* tail;
+	Node* head = NULL;
+	Node* tail = NULL;
 	unordered_map<int, Node> uMap;
 	unordered_map<int, Node>::iterator iter;
 };
