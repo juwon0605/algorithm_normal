@@ -46,6 +46,12 @@
 
 7. **코딩 인터뷰**
 
+   - [x] Array
+   - [x] List
+   - [x] Stack
+   - [ ] Queue
+   - [ ] Tree
+
    
 
 8. **카카오 기출**
