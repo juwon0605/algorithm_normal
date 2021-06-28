@@ -69,6 +69,7 @@ string infixToPostfix(string input) {
 				while (calPriority(input[i]) < calPriority(S.top())) {
 					postfix += S.top();
 					S.pop();
+					if (S.empty()) break;
 				}
 				S.push(input[i]);
 			}
