@@ -49,6 +49,87 @@ M개의 식에 대해 1(가능) 또는 0(불가능)을 빈 칸 하나씩을 사�
 #define _CRT_SECURE_NO_WARNINGS
 
 #include<iostream>
+using namespace std;
+
+void DFS(int);
+int numArr[8];
+int operArr[7];
+int n, answer;
+bool check;
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	freopen("input.txt", "rt", stdin);
+	int t, m;
+	cin >> t;
+	while (t--) {
+		cin >> m >> n;
+		while (m--) {
+			check = false;
+			fill(numArr, numArr + n, 0);
+			for (int i = 0; i < n; i++) cin >> numArr[i];
+			cin >> answer;
+			DFS(0);
+			cout << (check == true ? 1 : 0) << " ";
+		}
+		cout << endl;
+	}
+	return 0;
+}
+
+void DFS(int L) {
+	if (check == true) return;
+	if (L == n) {
+		int res = 0;
+		int temp = numArr[0];
+		for (int i = 0; i < n - 1; i++) {
+			if (operArr[i] == 0) {
+				res += temp;
+				temp = numArr[i + 1];
+			}
+			else {
+				temp *= numArr[i + 1];
+			}
+		}
+		res += temp;
+		if (res == answer) check = true;
+	}
+	else {
+		operArr[L] = 0;
+		DFS(L + 1);
+		operArr[L] = 1;
+		DFS(L + 1);
+	}
+}
+
+/*
+모범 답안
+DFS로 모든 연산 경우에 대해서 아래의 알고리즘을 수행한다.
+일단 temp에 첫 번째 숫자를 저장하고
++가 나오면 temp의 값을 res에 +=하고 temp에 다음 숫자를 저장하고
+*가 나오면 temp의 값에 다음 숫자를 곱한다.
+
+	시간 복잡도
+		O(TM2^N)
+	공간 복잡도
+		O(N)
+*/
+
+/*
+모범 답안 반영전
+
++와 *가 섞여있는 연산식을 한 번에 풀기 위해 사람이 쓰는 방식인 infix를
+컴퓨터가 연산하는 방식인 postfix로 전환하는 방법으로 풀었음.
+
+결과적으로 문제를 푸는데 너무 오래걸리고 비효율적이었고
+해당 문제만 효율적으로 풀기 위해서는 int 변수 2개만 있었으면 됐음.
+
+해당 문제의 풀이법이 떠올랐더라도 최적의 풀이인지 효율적인 풀이인지
+고민하고 구현하는 습관을 만들자.
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<iostream>
 #include<string>
 #include<stack>
 using namespace std;
@@ -85,7 +166,7 @@ void DFS(int L, string accum) {
 	if (check == true) return;
 	if (L == n) {
 		string postfix = infixToPostfix(accum);
-		int res = calPostfix(postfix);		
+		int res = calPostfix(postfix);
 		if (res == answer) check = true;
 	}
 	else {
@@ -157,3 +238,4 @@ int calPostfix(string input) {
 	}
 	return S.top();
 }
+*/
