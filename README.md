@@ -17,7 +17,13 @@
    - [x] Biorder
    - [x] Hanoi
    - [x] DFS/BFS
-
+   - [x] Prefix/Infix
+   - [x] Permutation/Combination
+   - [x] MST(Minimum Spanning Tree)
+   - [x] Dijkstra Algorithm
+   - [x] LCS(Longest Common Subsequence)
+   - [x] Greedy Algorithm
+   - [x] Knapsack Algorithm
    
 
 2. **DFS, BFS (완전탐색)**
@@ -38,6 +44,9 @@
 
 5. **맵 & 셋**
 
+   - [x] Map, Set
+   - [x] Multimap, Multisest
+   - [x] Unordered Map, UnorderedS Set
    
 
 6. **코딩 테스트 실전 모의고사**
