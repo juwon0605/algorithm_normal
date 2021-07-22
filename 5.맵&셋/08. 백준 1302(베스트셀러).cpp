@@ -23,26 +23,14 @@ top
 #include<iostream>
 #include<string>
 #include<unordered_map>
-#include<queue>
 using namespace std;
 
-struct Book {
-	string name;
-	int cnt;
-	Book(string a, int b) {
-		name = a;
-		cnt = b;
-	}
-	bool operator<(const Book &b) const {
-		return (cnt == b.cnt ? name > b.name : cnt < b.cnt);
-	}
-};
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	freopen("input.txt", "rt", stdin);
 	unordered_map<string, int> uM;
-	priority_queue<Book> pQ;
+	pair<string, int> res;
 	string str;
 	int n;
 	cin >> n;
@@ -50,17 +38,24 @@ int main() {
 		cin >> str;
 		uM[str]++;
 	}
-	for (auto iter = uM.begin(); iter != uM.end(); iter++) {
-		pQ.push(Book(iter->first, iter->second));
+	auto iter = uM.begin();
+	res.first = iter->first;
+	res.second = iter->second;
+	for (++iter; iter != uM.end(); iter++) {
+		if (res.second < iter->second
+			|| (res.second == iter->second && res.first > iter->first)) {
+			res.first = iter->first;
+			res.second = iter->second;
+		}
 	}
-	cout << pQ.top().name;
+	cout << res.first;
 	return 0;
 }
 
 /*
 모범 답안
 	시간복잡도
-		O(NlogN)
+		O(N)
 	공간복잡도
 		O(N)
 */
