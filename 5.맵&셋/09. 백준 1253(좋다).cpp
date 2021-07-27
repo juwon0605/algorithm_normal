@@ -20,6 +20,67 @@ N개의 수가 주어지면 그 중에서 좋은 수의 개수는 몇 개인지 
 #define _CRT_SECURE_NO_WARNINGS
 
 #include<iostream>
+#include<algorithm>
+using namespace std;
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	freopen("input.txt", "rt", stdin);
+	int arr[2000];
+	int n, left, right, now, res = 0;
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	sort(arr, arr + n);
+	for (int i = 0; i < n; i++) {
+		now = arr[i];
+		left = 0;
+		right = n - 1;
+		while (left < right) {
+			if (arr[left] + arr[right] == now) {
+				if (left != i && right != i) {
+					res++;
+					break;
+				}
+				else if (left == i) left++;
+				else if (right == i) right--;
+			}
+			else if (arr[left] + arr[right] < now) left++;
+			else right--;
+		}
+	}
+	cout << res;
+	return 0;
+}
+
+/*
+모범 답안
+
+	투포인트 알고리즘과 이진탐색을 활용해서 모든 상황에 대해 일반적인 풀이
+
+	시간 복잡도
+		O(N^2)
+	공간 복잡도
+		O(N)
+*/
+
+/*
+모범 답안 반영 전
+
+	모든 특수한 상황들을 생각해내고 각각 그 상황에 맞게 풀이
+	map, set 연습 문제 푼다고 너무 억지로 map, set을 사용하려고 했음
+	자유롭게 생각하면서 최적의 풀이를 찾아내자
+
+	시간 복잡도
+		O(N^2)
+	공간 복잡도
+		O(N)
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<iostream>
 #include<unordered_map>
 using namespace std;
 
@@ -72,16 +133,4 @@ int main() {
 	cout << res;
 	return 0;
 }
-
-/*
-모범 답안
-	시간복잡도
-		O(N^2)
-	공간복잡도
-		O(N)
-*/
-
-/*
-모범 답안 반영 전
-
 */
