@@ -160,5 +160,5 @@ string solution(string new_id) {
 	시간복잡도
 		O(N)
 	공간복잡도
-		O(1)
+		O(N)
 */
