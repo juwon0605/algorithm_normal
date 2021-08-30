@@ -88,6 +88,7 @@ int solution(string s) {
 	answer = min;
 	return answer;
 }
+
 /*
 모범 답안
 	시간복잡도
