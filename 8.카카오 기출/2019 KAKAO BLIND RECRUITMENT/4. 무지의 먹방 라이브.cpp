@@ -51,6 +51,61 @@ food_times	k	result
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool compare1(pair<int, int>, pair<int, int>);
+bool compare2(pair<int, int>, pair<int, int>);
+
+int solution(vector<int> food_times, long long k) {
+	int answer = -1;
+	vector<pair<int, int>> pV;
+	int n = food_times.size();
+	int accum = 0;
+	int rest = 0;
+	for (int i = 0; i < food_times.size(); i++) {
+		pV.push_back(make_pair(i + 1, food_times[i]));
+	}
+	sort(pV.begin(), pV.end(), compare1);
+	for (int i = 0; i < pV.size(); i++) {
+		if (((long long)pV[i].second - accum) * (n - i) <= k) {
+			k -= (pV[i].second - accum) * (n - i);
+			accum = pV[i].second;
+		}
+		else {
+			sort(pV.begin() + i, pV.end(), compare2);
+			rest = k % (n - i);
+			answer = pV[i + rest].first;
+			break;
+		}
+	}
+	return answer;
+}
+
+bool compare1(pair<int, int> a, pair<int, int> b) {
+	if (a.second != b.second) return a.second < b.second;
+	else return a.first < b.first;
+}
+
+bool compare2(pair<int, int> a, pair<int, int> b) {
+	return a.first < b.first;
+}
+
+/*
+모범 답안
+	시간복잡도
+		O(NlogN)
+	공간복잡도
+		O(N)
+*/
+
+/*
+모범 답안 반영 전
+
+#include <iostream>
+#include <string>
+#include <vector>
 #include <unordered_set>
 #include <algorithm>
 
@@ -69,21 +124,12 @@ int solution(vector<int> food_times, long long k) {
 		pV.push_back(make_pair(i + 1, food_times[i]));
 		uS.insert(i + 1);
 	}
-	//log
-	// for(auto iter = uS.begin(); iter != uS.end(); iter++){
-	//     cout << food_times[(*iter)-1] << " ";
-	// }
 	sort(pV.begin(), pV.end(), compare);
 	for (int i = 0; i < pV.size(); i++) {
 		if ((pV[i].second - accum) * uS.size() <= k) {
 			k -= (pV[i].second - accum) * uS.size();
 			accum = pV[i].second;
 			uS.erase(pV[i].first);
-			// log
-			// for(auto iter = uS.begin(); iter != uS.end(); iter++){
-			//     cout << food_times[(*iter)-1] << " ";
-			// }
-			// cout << "\n";
 		}
 		else {
 			for (auto iter = uS.begin(); iter != uS.end(); iter++) {
@@ -102,16 +148,4 @@ bool compare(pair<int, int> a, pair<int, int> b) {
 	if (a.second != b.second) return a.second < b.second;
 	else return a.first < b.first;
 }
-
-/*
-모범 답안
-	시간복잡도
-		O(NlogN)
-	공간복잡도
-		O(N)
-*/
-
-/*
-모범 답안 반영 전
-
 */
