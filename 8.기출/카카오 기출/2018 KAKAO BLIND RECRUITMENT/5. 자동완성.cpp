@@ -76,7 +76,7 @@ int solution(vector<string> words) {
 }
 
 /*
-내 풀이
+모범 풀이
 
 	정렬 후, 매번 이분탐색 2번 사용해서 사이에 한 개 밖에 없는지 확인
 	
