@@ -30,6 +30,75 @@ ICPC > Regionals > North America > Greater New York Region > 2009 Greater New Yo
 잘못된 데이터를 찾은 사람: tncks0121
 */
 
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <set>
+
+using namespace std;
+
+int main() {
+	freopen("input.txt", "rt", stdin);
+	int t;
+	cin >> t;
+	while (t--) {
+		int m;
+		cin >> m;
+		vector<int> numV(m);
+		for (int i = 0; i < m; i++) {
+			cin >> numV[i];
+		}
+		vector<int> answerV;
+
+		multiset<int> multiS;
+		multiS.insert(numV[0]);
+		auto iter = multiS.find(numV[0]);
+		answerV.push_back(*iter);
+
+		for (int i = 1; i < m; ++i) {
+			int now = numV[i];
+			multiS.insert(now);
+			if (now < *iter) {
+				--iter;
+			}
+			if (i % 2 == 0) {
+				++iter;
+				answerV.push_back(*iter);
+			}
+		}
+
+		cout << answerV.size() << "\n";
+		for (int i = 0; i < answerV.size(); ++i) {
+			if (i != 0 && i % 10 == 0) cout << "\n";
+			cout << answerV[i] << " ";
+		}
+		cout << "\n";
+	}
+
+	return 0;
+}
+
+
+/*
+모범 풀이1
+
+	시간복잡도
+		O(TMlogM)
+	공간복잡도
+		O(M)
+*/
+
+/*
+모범 풀이2
+
+	시간복잡도
+		O(TMlogM)
+	공간복잡도
+		O(M)
+
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
@@ -88,19 +157,12 @@ int main() {
 
 	return 0;
 }
-
-
-/*
-모범 풀이
-
-	시간복잡도
-		O(TMlogM)
-	공간복잡도
-		O(M)
 */
 
 /*
 모범 풀이 반영 전
+
+	답은 맞았음!
 
 	시간복잡도
 		O(TMlogM)
