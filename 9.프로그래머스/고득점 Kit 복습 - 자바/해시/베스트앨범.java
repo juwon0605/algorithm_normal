@@ -34,7 +34,6 @@ pop 장르는 3,100회 재생되었으며, pop 노래는 다음과 같습니다.
 ※ 공지 - 2019년 2월 28일 테스트케이스가 추가되었습니다.
 */
 
-import java.io.*;
 import java.util.*;
 
 class Solution {
